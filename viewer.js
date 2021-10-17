@@ -766,6 +766,16 @@ function Viewer() {
 		side: THREE.DoubleSide,
 		precision: 'mediump'
 	});
+
+	this.mixer = null;
+	var clock = new THREE.Clock();
+	const tick = () => {
+		window.requestAnimationFrame(tick)
+		if (this.mixer) {
+			this.mixer.update(clock.getDelta());
+		}
+	}
+	tick();
 	
 	function loadModel(url) {
 		
@@ -955,6 +965,19 @@ function Viewer() {
 				makeSceneGraph(gltf.scene)
 
 				hide(ViewerUI.loader);
+
+				try {
+					if (this.action) {
+						this.action.stop();
+					}
+					var model = gltf.scene
+					var anim = gltf.animations[0]
+					this.mixer = new THREE.AnimationMixer( model );
+					this.mixer.timeScale=1;
+					this.action = this.mixer.clipAction( anim );
+					this.action.play();
+				} catch (e) {
+				}
 				
 			},
 			function onProgress(xhr) {
