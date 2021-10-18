@@ -18,7 +18,8 @@
 </head>
 <body>
 	<div class='wrapper'>
-	    <div class='header'>
+	    <div class='header'
+			style="display:{%if name%}none{%endif%}">
 	        <div class='header-left'> 
 	            <div class='header-item' id='toggleModelBrowser'>
 	                <div class='header-icon'><i class='fa fa-sitemap'></i></div>
@@ -71,7 +72,8 @@
 	                </div>
 	            </div>
 	        </div>
-	        <div class='right-container'>
+	        <div class='right-container'
+				style="display:{%if name%}none{%endif%}">
 	            <div id='backToHome'><i class='fa fa-home'></i></div>
 	            <div id='orientCubeWrapper'></div>
 	        </div>
@@ -83,7 +85,8 @@
 	            <div class='loader-spinner'></div>
 	        </div>
 	    </div>
-	    <div class='footer'>
+	    <div class='footer'
+			style="display:{%if name%}none{%endif%}">
 	        <div class='footer-item' id='resetBtn'>
 	            <div class='footer-icon'><i class='fa fa-home'></i></div>
 	            <div class='footer-title'>Home</div>
