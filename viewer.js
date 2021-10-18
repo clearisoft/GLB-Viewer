@@ -767,6 +767,49 @@ function Viewer() {
 		precision: 'mediump'
 	});
 
+	this.ini_xyz = [1,1,1]
+	this.obj_xyz = [0,0,0]
+	this.ratio_xyz = [1,1,1]
+	this.ratio_ypr = [1,1,1]
+	that = this;
+	function setParams(ini_xyz, obj_xyz, ratio_xyz, ratio_ypr) {
+		that.ini_xyz = ini_xyz.split(',').map(Number);
+		that.obj_xyz = obj_xyz.split(',').map(Number);
+		that.ratio_xyz = ratio_xyz.split(',').map(Number);
+		that.ratio_ypr = ratio_ypr.split(',').map(Number);
+	}
+
+	function getQueryString(str, key) {
+		var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)", "i");
+		var r = str.match(reg);
+		if (r != null) {
+			return unescape(r[2]);
+		}
+	}
+
+	function receiveMsg(e) {
+		let origin_meter_x = parseFloat(getQueryString(e.data.body, 'origin_x'));
+		let origin_meter_y = parseFloat(getQueryString(e.data.body, 'origin_y'));
+		let origin_meter_z = parseFloat(getQueryString(e.data.body, 'origin_z'));
+		let yaw = parseFloat(getQueryString(e.data.body, 'yaw'));
+		let pitch = parseFloat(getQueryString(e.data.body, 'pitch'));
+
+		dz = (this.ini_xyz[2] - this.obj_xyz[2] > 0) ? 1 : -1
+		offset_x = dz * origin_meter_x * this.ratio_xyz[0]
+		offset_y =  1 * origin_meter_y * this.ratio_xyz[1]
+		offset_z = dz * origin_meter_z * this.ratio_xyz[2]
+		meter_x = this.ini_xyz[0] + offset_x
+		meter_y = this.ini_xyz[1] + offset_y
+		meter_z = this.ini_xyz[2] + offset_z
+		meter_lt_x = this.obj_xyz[0] + offset_x + dz * Math.abs(meter_z - this.obj_xyz[2]) * yaw * this.ratio_ypr[0]
+		meter_lt_y = this.obj_xyz[1] + offset_y +  1 * Math.abs(meter_z - this.obj_xyz[2]) * pitch * this.ratio_ypr[1]
+		meter_lt_z = this.obj_xyz[2]
+
+		camera.position.set(meter_x, meter_y, meter_z);
+		camera.lookAt(new THREE.Vector3(meter_lt_x, meter_lt_y, meter_lt_z));
+	}
+	window.addEventListener('message', receiveMsg, false)
+
 	this.mixer = null;
 	var clock = new THREE.Clock();
 	const tick = () => {
@@ -1081,7 +1124,8 @@ function Viewer() {
 	requestAnimationFrame(animate);
 	
 	return {
-		loadModel: loadModel
+		loadModel: loadModel,
+		setParams: setParams,
 	};
 	
 }

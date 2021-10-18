@@ -119,7 +119,11 @@
 	
 	window.onload = () => {
 		let v = Viewer();
-		v.loadModel('models/pistol.glb');
+		let modelName = '{{name}}' ? '{{name}}' : 'pistol'
+		v.loadModel('models/' + modelName + '.glb');
+		if ('{{name}}') {
+			v.setParams('{{ini_xyz}}', '{{obj_xyz}}', '{{ratio_xyz}}', '{{ratio_ypr}}');
+		}
 	}
 
 	</script>
