@@ -808,8 +808,8 @@ function Viewer() {
 			meter_x = this.ini_xyz[0] + offset_x
 			meter_y = this.ini_xyz[1] + offset_y
 			meter_z = this.ini_xyz[2] + offset_z
-			meter_lt_x = this.obj_xyz[0] + offset_x + dz * Math.abs(meter_z - this.obj_xyz[2]) * yaw * this.ratio_ypr[0]
-			meter_lt_y = this.obj_xyz[1] + offset_y + 1 * Math.abs(meter_z - this.obj_xyz[2]) * pitch * this.ratio_ypr[1]
+			meter_lt_x = this.obj_xyz[0] + offset_x * 0 + dz * Math.abs(meter_z - this.obj_xyz[2]) * yaw * this.ratio_ypr[0]
+			meter_lt_y = this.obj_xyz[1] + offset_y * 0 + 1 * Math.abs(meter_z - this.obj_xyz[2]) * pitch * this.ratio_ypr[1]
 			meter_lt_z = this.obj_xyz[2]
 
 			camera.position.set(meter_x, meter_y, meter_z);
